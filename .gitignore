@@ -1,4 +1,6 @@
 test/__pycache__
 dist
 haikuthegibson.egg-info
+haikuthegibson/secret.py
+haikuthegibson/__pycache__
 .cache

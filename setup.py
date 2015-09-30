@@ -18,7 +18,7 @@ setup(
     ],
     keywords='poetry',
     packages=['haikuthegibson'],
-    install_requires = ['prosaic==3.4.0', 'tweeepy==3.4.0',],
+    install_requires = ['prosaic==3.4.0', 'tweepy==3.4.0',],
     entry_points = {
           'console_scripts': [
               'haikuthegibson  = haikuthegibson.__init__:main'

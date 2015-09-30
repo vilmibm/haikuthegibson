@@ -15,8 +15,45 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import sys
 
-def main():
-    print('i do nothing yet')
-    return 1
+from prosaic.cthulhu import poem_from_template
+from pymongo import MongoClient
+import tweepy
 
-if __name__ == '__main__': sys.exit(main())
+import haikuthegibson.secret
+
+HAIKU_TEMPLATE = [{'syllables': 5},
+                  {'syllables': 7},
+                  {'syllables': 5},]
+
+def get_auth():
+    auth = tweepy.OAuthHandler(secret.API_KEY, secret.API_SECRET)
+    auth.set_access_token(secret.ACCESS_TOKEN, secret.ACCESS_SECRET)
+    return auth
+
+def get_api_client(auth):
+    return tweepy.API(auth_handler=auth)
+
+def main():
+    mongo_coll = MongoClient().thegibson.phrases
+    twitter_auth = tweepy.OAuthHandler(secret.API_KEY, secret.API_SECRET)
+    twitter_auth.set_access_token(secret.ACCESS_TOKEN, secret.ACCESS_SECRET)
+
+    twitter_client = tweepy.API(twitter_auth)
+
+    poem_lines = poem_from_template(HAIKU_TEMPLATE, mongo_coll)
+    poem_raw_lines = map(lambda l: l['raw'], poem_lines)
+
+    try:
+        return twitter_client.update_status(status='\n'.join(poem_raw_lines))
+    except tweepy.error.TweepError as e:
+        return e
+
+if __name__ == '__main__':
+    result = main()
+
+    if isinstance(result, tweepy.error.TweepError):
+        code = 1
+    else:
+        code = 0
+
+    sys.exit(code)
