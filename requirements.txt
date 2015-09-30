@@ -1,0 +1,2 @@
+prosaic==3.4.0
+tweepy==3.4.0
