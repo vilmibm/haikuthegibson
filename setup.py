@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='haikuthegibson',
-    version='0.0.1',
+    version='1.0.0',
     description='tweetbot of haiku from Hackers script',
     url='https://github.com/nathanielksmith/haikuthegibson',
     author='vilmibm shaksfrpease',
@@ -18,7 +18,7 @@ setup(
     ],
     keywords='poetry',
     packages=['haikuthegibson'],
-    install_requires = ['prosaic==3.4.0', 'tweepy==3.4.0',],
+    install_requires = ['prosaic==5.1.0', 'tweepy==3.5.0',],
     entry_points = {
           'console_scripts': [
               'haikuthegibson  = haikuthegibson.__init__:main'

@@ -15,15 +15,19 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import sys
 
-from prosaic.cthulhu import poem_from_template
-from pymongo import MongoClient
+from prosaic.generation import poem_from_template
+from prosaic.models import Database
 import tweepy
 
-import haikuthegibson.secret
+import haikuthegibson.secret as secret
 
 HAIKU_TEMPLATE = [{'syllables': 5},
                   {'syllables': 7},
                   {'syllables': 5},]
+
+DATABASE = Database()
+# LOL
+CORPUS_ID=6
 
 def get_auth():
     auth = tweepy.OAuthHandler(secret.API_KEY, secret.API_SECRET)
@@ -34,13 +38,12 @@ def get_api_client(auth):
     return tweepy.API(auth_handler=auth)
 
 def main():
-    mongo_coll = MongoClient().thegibson.phrases
     twitter_auth = tweepy.OAuthHandler(secret.API_KEY, secret.API_SECRET)
     twitter_auth.set_access_token(secret.ACCESS_TOKEN, secret.ACCESS_SECRET)
 
     twitter_client = tweepy.API(twitter_auth)
 
-    poem_lines = poem_from_template(HAIKU_TEMPLATE, mongo_coll)
+    poem_lines = poem_from_template(HAIKU_TEMPLATE, DATABASE, CORPUS_ID)
     poem_raw_lines = map(lambda l: l['raw'], poem_lines)
 
     try:
